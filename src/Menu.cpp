@@ -11,7 +11,7 @@ void Menu::setText(){
 	int initialY = windo->getSize().y / 4;
 	int textOffset = 100;	
 	int textSize = 30;
-	font.loadFromFile("fonts\\arial.ttf");
+	font.loadFromFile("fonts/arial.ttf");
 	
 
 	textPvP.setString("Player vs Player");
