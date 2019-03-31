@@ -1,12 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include "Menu.h"
 #include "GameMaster.h"
+#include "BattleField.h"
 
 #include <iostream>
 
 
 sf::RenderWindow window(sf::VideoMode(1000, 500), "Battle Ships");
 Menu menuClass(&window);
+BattleField battleField(&window);
 
 int main(){
     
@@ -25,7 +27,7 @@ int main(){
 											menuClass.draw();
 											break;
 		}
-
+		battleField.draw();
 		window.display();
 	}
 

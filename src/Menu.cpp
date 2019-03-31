@@ -2,13 +2,13 @@
 
 
 Menu::Menu(sf::RenderWindow *window){
-	windo = window;
+	this->window = window;
 	Menu::setText();
 }
 
 void Menu::setText(){
-	int centerX = windo->getSize().x / 2;
-	int initialY = windo->getSize().y / 4;
+	int centerX = window->getSize().x / 2;
+	int initialY = window->getSize().y / 4;
 	int textOffset = 100;	
 	int textSize = 30;
 	font.loadFromFile("fonts/arial.ttf");
@@ -37,7 +37,7 @@ void Menu::setText(){
 
 
 void Menu::actions(){
-	sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(*windo);
+	sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(*window);
 	
 	if (textPvP.getGlobalBounds().contains(mousePos))
 		textPvP.setFillColor(sf::Color::Black);
@@ -57,8 +57,8 @@ void Menu::actions(){
 
 void Menu::draw(){
 	
-	windo->draw(textPvC);
-	windo->draw(textExit);
-	windo->draw(textPvP);
+	window->draw(textPvC);
+	window->draw(textExit);
+	window->draw(textPvP);
 }
 

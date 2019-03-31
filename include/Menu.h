@@ -3,7 +3,7 @@
 
 class Menu{
 private:
-	sf::RenderWindow *windo;
+	sf::RenderWindow *window;
 	sf::Text textPvP, textPvC, textExit;
 	sf::Font font;
 	void setText();
