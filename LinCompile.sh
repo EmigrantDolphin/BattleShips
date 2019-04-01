@@ -20,7 +20,7 @@ then
 
 	if [[ "$2" == "run" ]]
 	then
-		g++ main.cpp -o BattleShipsL.out $sfml $mysrc && ./LinuxLauncher.out
+		g++ main.cpp -o BattleShipsL.out $sfml $mysrc && ./BattleShipsL.out
 	fi
 fi
 

@@ -4,13 +4,16 @@ class BattleField{
 private:
 	sf::RenderWindow *window;
 	
-	int posX = 10, posY = 10;
-	static const int FieldWidth = 10, FieldHeight = 10, RectSize = 30, RectThickness = 3;
+	float posX = 10, posY = 10;
+	static const int FieldWidth = 10, FieldHeight = 10, RectSize = 30, RectThickness = 1;
 	sf::RectangleShape fieldArr[FieldWidth][FieldHeight];
+	sf::RectangleShape fieldBounds;
 	
 	void createField();
+	void onMouseHover();
 public:
 	BattleField(sf::RenderWindow *);
 	void draw();
+	void setPos(float, float);
 	
 };
