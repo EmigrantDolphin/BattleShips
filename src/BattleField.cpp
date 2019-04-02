@@ -7,7 +7,7 @@ BattleField::BattleField(sf::RenderWindow *window){
 }
 
 void BattleField::createField(){
-	fieldBounds.setSize(sf::Vector2f(RectSize * FieldWidth+2,  RectSize * FieldHeight+2));
+	fieldBounds.setSize(sf::Vector2f((RectSize+2) * FieldWidth,  (RectSize+2) * FieldHeight));
 	fieldBounds.setOutlineThickness(1);
 	fieldBounds.setOutlineColor(sf::Color::Black);
 	fieldBounds.setPosition(posX-1, posY-1);
