@@ -7,10 +7,10 @@ BattleField::BattleField(sf::RenderWindow *window){
 }
 
 void BattleField::createField(){
-	fieldBounds.setSize(sf::Vector2f((RectSize+2) * FieldWidth,  (RectSize+2) * FieldHeight));
-	fieldBounds.setOutlineThickness(1);
+	fieldBounds.setSize(sf::Vector2f((RectSize+(RectThickness*2)) * FieldWidth,  (RectSize+(RectThickness*2)) * FieldHeight));
+	fieldBounds.setOutlineThickness(RectThickness);
 	fieldBounds.setOutlineColor(sf::Color::Black);
-	fieldBounds.setPosition(posX-1, posY-1);
+	fieldBounds.setPosition(posX-RectThickness, posY-RectThickness);
 	
 	for (int i = 0; i < FieldHeight; i++)
 		for (int j = 0; j < FieldWidth; j++){
@@ -24,6 +24,8 @@ void BattleField::createField(){
 
 void BattleField::draw(){
 	onMouseHover();
+	onMouseClick();
+	
 	window->draw(fieldBounds);
 	for (int i = 0; i < FieldHeight; i++)
 		for (int j = 0; j < FieldWidth; j++){
@@ -39,13 +41,44 @@ void BattleField::setPos(float x, float y){
 
 void BattleField::onMouseHover(){
 	sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(*window);
-	
+	int selectedI = -1, selectedJ = -1;
 	for (int i = 0; i < FieldHeight; i++)
 		for (int j = 0; j < FieldWidth; j++){
-			if (fieldArr[i][j].getGlobalBounds().contains(mousePos))
-				fieldArr[i][j].setFillColor(sf::Color::Red);
-			else
-				fieldArr[i][j].setFillColor(sf::Color::White);
+			if (fieldArr[i][j].getGlobalBounds().contains(mousePos)){
+				selectedI = i;
+				selectedJ = j;
+			}
+			fieldArr[i][j].setFillColor(sf::Color::White);
+			
 		}
 	
+	if (selectedI != -1)
+		switch(editState){
+			case EditState::None :		fieldArr[selectedI][selectedJ].setFillColor(sf::Color::Black);
+									break;
+			case EditState::Vertical :		hoverShipV(selectedI, selectedJ);
+									break;
+			case EditState::Horizontal:	hoverShipH(selectedI, selectedJ);
+									break;
+		}
+		
+	
+}
+//shipSize is enum of {one two three four} = {0 1 2 3}
+void BattleField::hoverShipH(int selectedI, int selectedJ){
+	if (selectedJ+shipSize+1 > FieldWidth)
+		return;
+	for (int j = selectedJ; j < selectedJ+shipSize+1; j++)
+		fieldArr[selectedI][j].setFillColor(sf::Color::Green);
+}
+
+void BattleField::hoverShipV(int selectedI, int selectedJ){
+	if (selectedI+shipSize+1 > FieldHeight)
+		return;
+	for (int i = selectedI; i < selectedI+shipSize+1; i++)
+		fieldArr[i][selectedJ].setFillColor(sf::Color::Green);
+}
+
+void BattleField::onMouseClick(){
+	//save ship and ship caunter and stuff
 }

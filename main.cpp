@@ -3,6 +3,7 @@
 #include "GameMaster.h"
 #include "BattleField.h"
 
+
 #include <iostream>
 
 
@@ -11,7 +12,6 @@ Menu menuClass(&window);
 BattleField battleField(&window);
 
 int main(){
-    
 
 	while (window.isOpen()){
 		sf::Event event;

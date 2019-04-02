@@ -30,6 +30,8 @@ then
 	then
 		touch src/$2.cpp
 		touch include/$2.h
+		xdg-open src/$2.cpp
+		xdg-open include/$2.h
 	fi
 fi
 
