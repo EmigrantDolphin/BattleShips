@@ -13,12 +13,15 @@ private:
 	static const int FieldWidth = 10, FieldHeight = 10, RectSize = 30, RectThickness = 1;
 	RectShapeEnh fieldArr[FieldWidth][FieldHeight];
 	sf::RectangleShape fieldBounds; // to make edges same as inner lines
+
+	sf::Vector2i selectedRectPos;
 	
 	void createField();
 	void onMouseHover();
-	void hoverShipH(int, int); //used in onMouseHover to draw hovering ship, not yet placed
-	void hoverShipV(int, int);
+	void hoverShipH(); //used in onMouseHover to draw hovering ship, not yet placed
+	void hoverShipV();
 	void onMouseClick();
+	void selectRect();
 public:
 	BattleField(sf::RenderWindow *);
 	void draw();
