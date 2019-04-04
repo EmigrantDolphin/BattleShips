@@ -28,7 +28,10 @@ void BattleField::draw(){
 	for (int i = 0; i < FieldHeight; i++)
 		for (int j = 0; j < FieldWidth; j++){
 			//if [cell state] then depending on cell state
-			fieldArr[i][j].setFillColor(sf::Color::White);
+			if (fieldArr[i][j].state == RectShapeEnh::State::Alive)
+				fieldArr[i][j].setFillColor(sf::Color(222, 184, 135));
+			if (fieldArr[i][j].state == RectShapeEnh::State::Water)
+				fieldArr[i][j].setFillColor(sf::Color::White);
 		}
 	
 	selectRect();
@@ -76,21 +79,117 @@ void BattleField::onMouseHover(){
 		
 	
 }
-//shipSize is enum of {one two three four} = {0 1 2 3}
+
 void BattleField::hoverShipH(){
-	if (selectedRectPos.x+shipSize+1 > FieldWidth)
+	if (!doesHorizFit())
 		return;
-	for (int j = selectedRectPos.x; j < selectedRectPos.x+shipSize+1; j++)
+	for (int j = selectedRectPos.x; j < selectedRectPos.x+getShipSize(); j++)
 		fieldArr[selectedRectPos.y][j].setFillColor(sf::Color::Green);
 }
 
 void BattleField::hoverShipV(){
-	if (selectedRectPos.y+shipSize+1 > FieldHeight)
+	if (!doesVertiFit())
 		return;
-	for (int i = selectedRectPos.y; i < selectedRectPos.y+shipSize+1; i++)
+	for (int i = selectedRectPos.y; i < selectedRectPos.y+getShipSize(); i++)
 		fieldArr[i][selectedRectPos.x].setFillColor(sf::Color::Green);
 }
 
+bool BattleField::doesHorizFit(){
+	if (selectedRectPos.x == -1)
+		return false;
+	if (selectedRectPos.x+getShipSize() > FieldWidth)
+		return false;
+	return true;
+}
+
+bool BattleField::doesVertiFit(){
+	if (selectedRectPos.x == -1)
+		return false;
+	if (selectedRectPos.y+getShipSize() > FieldHeight)
+		return false;
+	return true;
+}
+//shipSize is enum of {two three four five} = {0 1 2 3}
+int BattleField::getShipSize(){
+	return shipSize + 2;
+}
+
+bool BattleField::isNoOneAroundH(){
+	if (!doesHorizFit())
+		return false;
+	sf::Vector2i topLeft;
+	sf::Vector2i bottomRight;
+	if (selectedRectPos.y - 1 >= 0)
+		topLeft.y = selectedRectPos.y - 1;
+	else
+		topLeft.y == selectedRectPos.y;
+	
+	if (selectedRectPos.x -1 >= 0)
+		topLeft.x == selectedRectPos.x -1;
+	else
+		topLeft.x == selectedRectPos.x;
+	// WHAT THE FUCK
+	
+	if (selectedRectPos.y + 1 < FieldHeight)
+		bottomRight.y = selectedRectPos.y + 1;
+	else
+		bottomRight.y = selectedRectPos.y;
+	
+	if (selectedRectPos.x + getShipSize() + 1 < FieldWidth)
+		bottomRight.x = selectedRectPos.x + getShipSize() +1;
+	else
+		bottomRight.x = selectedRectPos.x + getShipSize();
+	fieldArr[topLeft.y][topLeft.x].setFillColor(sf::Color::Black);
+	for (int i = topLeft.y; i <= bottomRight.y; i++)
+		for (int j = topLeft.x; j <= bottomRight.x; j++)
+			if (fieldArr[i][j].state != RectShapeEnh::State::Water)
+				return false;
+	return true;
+}
+
+bool BattleField::isNoOneAroundV(){
+	if (!doesVertiFit())
+		return false;
+	sf::Vector2i topLeft;
+	sf::Vector2i bottomRight;
+	
+	if (selectedRectPos.y - 1 >= 0)
+		topLeft.y = selectedRectPos.y -1;
+	else
+		topLeft.y = selectedRectPos.y;
+	
+	if (selectedRectPos.x - 1 >= 0)
+		topLeft.x = selectedRectPos.x -1;
+	else
+		topLeft.x = selectedRectPos.x;
+	
+	if (selectedRectPos.y + getShipSize() + 1 < FieldHeight)
+		bottomRight.y = selectedRectPos.y + getShipSize() + 1;
+	else
+		bottomRight.y = selectedRectPos.y + getShipSize();
+	
+	if (selectedRectPos.x + 1 < FieldWidth)
+		bottomRight.x = selectedRectPos.x + 1;
+	else
+		bottomRight.x = selectedRectPos.x;
+	
+	for (int i = topLeft.y; i < bottomRight.y; i++)
+		for (int j = topLeft.x; j < bottomRight.x; j++)
+			if (fieldArr[i][j].state != RectShapeEnh::State::Water)
+				return false;
+			
+	return true;
+}
+
 void BattleField::onMouseClick(){
-	//save ship and ship caunter and stuff
+	if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		return;
+	
+	if (editState == EditState::Horizontal && isNoOneAroundH()){
+		for (int i = selectedRectPos.x; i < selectedRectPos.x + getShipSize(); i++)
+			fieldArr[selectedRectPos.y][i].state = RectShapeEnh::State::Alive;
+	}
+	if (editState == EditState::Vertical && isNoOneAroundV())
+		for (int i = selectedRectPos.y; i < selectedRectPos.y + getShipSize(); i++)
+			fieldArr[i][selectedRectPos.x].state = RectShapeEnh::State::Alive;
 }
