@@ -15,7 +15,7 @@ then
 
 	if [[ "$2" == "" ]]
 	then
-		g++ main.cpp -o BattleShipsL.asd $sfml $mysrc
+		g++ main.cpp -o BattleShipsL.out $sfml $mysrc
 	fi	
 
 	if [[ "$2" == "run" ]]
