@@ -37,6 +37,7 @@ void BattleField::draw(){
 	selectRect();
 	onMouseHover();
 	onMouseClick();
+	onKeyPress();
 	
 	window->draw(fieldBounds);
 	for (int i = 0; i < FieldHeight; i++)
@@ -71,10 +72,11 @@ void BattleField::onMouseHover(){
 		switch(editState){
 			case EditState::None :		fieldArr[selectedRectPos.y][selectedRectPos.x].setFillColor(sf::Color::Black);
 									break;
-			case EditState::Vertical :		hoverShipV();
+			case EditState::Vertical :	hoverShipV();
 									break;
 			case EditState::Horizontal:	hoverShipH();
 									break;
+			case EditState::Erase :		fieldArr[selectedRectPos.y][selectedRectPos.x].setFillColor(sf::Color::Red);
 		}
 		
 	
@@ -83,21 +85,21 @@ void BattleField::onMouseHover(){
 void BattleField::hoverShipH(){
 	if (!doesHorizFit())
 		return;
-	for (int j = selectedRectPos.x; j < selectedRectPos.x+getShipSize(); j++)
+	for (int j = selectedRectPos.x; j < selectedRectPos.x+getSelectedShipSize(); j++)
 		fieldArr[selectedRectPos.y][j].setFillColor(sf::Color::Green);
 }
 
 void BattleField::hoverShipV(){
 	if (!doesVertiFit())
 		return;
-	for (int i = selectedRectPos.y; i < selectedRectPos.y+getShipSize(); i++)
+	for (int i = selectedRectPos.y; i < selectedRectPos.y+getSelectedShipSize(); i++)
 		fieldArr[i][selectedRectPos.x].setFillColor(sf::Color::Green);
 }
 
 bool BattleField::doesHorizFit(){
 	if (selectedRectPos.x == -1)
 		return false;
-	if (selectedRectPos.x+getShipSize() > FieldWidth)
+	if (selectedRectPos.x+getSelectedShipSize() > FieldWidth)
 		return false;
 	return true;
 }
@@ -105,13 +107,13 @@ bool BattleField::doesHorizFit(){
 bool BattleField::doesVertiFit(){
 	if (selectedRectPos.x == -1)
 		return false;
-	if (selectedRectPos.y+getShipSize() > FieldHeight)
+	if (selectedRectPos.y+getSelectedShipSize() > FieldHeight)
 		return false;
 	return true;
 }
 //shipSize is enum of {two three four five} = {0 1 2 3}
-int BattleField::getShipSize(){
-	return shipSize + 2;
+int BattleField::getSelectedShipSize(){
+	return selectedShipSize + 2;
 }
 
 bool BattleField::isNoOneAroundH(){
@@ -122,24 +124,24 @@ bool BattleField::isNoOneAroundH(){
 	if (selectedRectPos.y - 1 >= 0)
 		topLeft.y = selectedRectPos.y - 1;
 	else
-		topLeft.y == selectedRectPos.y;
+		topLeft.y = selectedRectPos.y;
 	
 	if (selectedRectPos.x -1 >= 0)
-		topLeft.x == selectedRectPos.x -1;
+		topLeft.x = selectedRectPos.x -1;
 	else
-		topLeft.x == selectedRectPos.x;
-	// WHAT THE FUCK
+		topLeft.x = selectedRectPos.x;
 	
 	if (selectedRectPos.y + 1 < FieldHeight)
 		bottomRight.y = selectedRectPos.y + 1;
 	else
 		bottomRight.y = selectedRectPos.y;
 	
-	if (selectedRectPos.x + getShipSize() + 1 < FieldWidth)
-		bottomRight.x = selectedRectPos.x + getShipSize() +1;
+	if (selectedRectPos.x + getSelectedShipSize() < FieldWidth)
+		bottomRight.x = selectedRectPos.x + getSelectedShipSize() ;
 	else
-		bottomRight.x = selectedRectPos.x + getShipSize();
-	fieldArr[topLeft.y][topLeft.x].setFillColor(sf::Color::Black);
+		bottomRight.x = selectedRectPos.x + getSelectedShipSize()-1;
+	//fieldArr[topLeft.y][topLeft.x].setFillColor(sf::Color::Black);
+	//fieldArr[bottomRight.y][bottomRight.x].setFillColor(sf::Color::Black);
 	for (int i = topLeft.y; i <= bottomRight.y; i++)
 		for (int j = topLeft.x; j <= bottomRight.x; j++)
 			if (fieldArr[i][j].state != RectShapeEnh::State::Water)
@@ -163,22 +165,39 @@ bool BattleField::isNoOneAroundV(){
 	else
 		topLeft.x = selectedRectPos.x;
 	
-	if (selectedRectPos.y + getShipSize() + 1 < FieldHeight)
-		bottomRight.y = selectedRectPos.y + getShipSize() + 1;
+	if (selectedRectPos.y + getSelectedShipSize() < FieldHeight)
+		bottomRight.y = selectedRectPos.y + getSelectedShipSize();
 	else
-		bottomRight.y = selectedRectPos.y + getShipSize();
+		bottomRight.y = selectedRectPos.y + getSelectedShipSize() -1;
 	
 	if (selectedRectPos.x + 1 < FieldWidth)
 		bottomRight.x = selectedRectPos.x + 1;
 	else
 		bottomRight.x = selectedRectPos.x;
-	
-	for (int i = topLeft.y; i < bottomRight.y; i++)
-		for (int j = topLeft.x; j < bottomRight.x; j++)
+	//fieldArr[topLeft.y][topLeft.x].setFillColor(sf::Color::Black);
+	//fieldArr[bottomRight.y][bottomRight.x].setFillColor(sf::Color::Black);
+	for (int i = topLeft.y; i <= bottomRight.y; i++)
+		for (int j = topLeft.x; j <= bottomRight.x; j++)
 			if (fieldArr[i][j].state != RectShapeEnh::State::Water)
 				return false;
 			
 	return true;
+}
+
+int BattleField::eraseShip(int x, int y){
+	int kills = 0;
+	if (x < 0 || x >= FieldWidth || y < 0 || y >=FieldHeight)
+		return 0;
+	if (fieldArr[y][x].state == RectShapeEnh::State::Water)
+		return 0;
+	fieldArr[y][x].state = RectShapeEnh::State::Water;
+	kills++;
+	
+	kills += eraseShip(x+1, y);
+	kills += eraseShip(x-1, y);
+	kills += eraseShip(x, y+1);
+	kills += eraseShip(x, y-1);
+	return kills;
 }
 
 void BattleField::onMouseClick(){
@@ -186,10 +205,31 @@ void BattleField::onMouseClick(){
 		return;
 	
 	if (editState == EditState::Horizontal && isNoOneAroundH()){
-		for (int i = selectedRectPos.x; i < selectedRectPos.x + getShipSize(); i++)
+		for (int i = selectedRectPos.x; i < selectedRectPos.x + getSelectedShipSize(); i++)
 			fieldArr[selectedRectPos.y][i].state = RectShapeEnh::State::Alive;
 	}
 	if (editState == EditState::Vertical && isNoOneAroundV())
-		for (int i = selectedRectPos.y; i < selectedRectPos.y + getShipSize(); i++)
+		for (int i = selectedRectPos.y; i < selectedRectPos.y + getSelectedShipSize(); i++)
 			fieldArr[i][selectedRectPos.x].state = RectShapeEnh::State::Alive;
+
+	if (editState == EditState::Erase && fieldArr[selectedRectPos.y][selectedRectPos.x].state == RectShapeEnh::State::Alive)
+		eraseShip(selectedRectPos.x, selectedRectPos.y);
+}
+
+void BattleField::onKeyPress(){
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		editState = EditState::Horizontal;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		editState = EditState::Vertical;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		editState = EditState::Erase;
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+		selectedShipSize = ShipSize::Two;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+		selectedShipSize = ShipSize::Three;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+		selectedShipSize = ShipSize::Four;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
+		selectedShipSize = ShipSize::Five;
 }

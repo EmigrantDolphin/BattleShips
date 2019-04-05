@@ -1,13 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <RectShapeEnh.h>
+#include <iostream>
 class BattleField{
 public:
-	enum EditState {Horizontal, Vertical, None};
+	enum EditState {Horizontal, Vertical, Erase, None};
 	enum ShipSize {Two, Three, Four, Five};
 private:
 	sf::RenderWindow *window;
-	EditState editState = EditState::Horizontal;
-	ShipSize shipSize = ShipSize::Five;
+	EditState editState = EditState::Vertical;
+	ShipSize selectedShipSize = ShipSize::Five;
 
 	int fiveShipsFree = 1, fourShipsFree = 2, threeShipsFree = 3, twoShipsFree = 4;
 	int fiveShipsPlaced = 0, fourShipsPlaced = 0, threeShipsPlaced = 0, twoShipsPlaced = 0;
@@ -20,16 +21,19 @@ private:
 	sf::Vector2i selectedRectPos;
 	
 	void createField();
-	int getShipSize();
+
+	int getSelectedShipSize();
 	void onMouseHover();
 	void hoverShipH(); //used in onMouseHover to draw hovering ship, not yet placed
 	void hoverShipV();
 	bool doesHorizFit();
 	bool doesVertiFit();
-	bool isNoOneAroundH();
+	bool isNoOneAroundH();// checks if there is no one close in a rectangle surrounding potential ship position
 	bool isNoOneAroundV();
 	void onMouseClick();
+	void onKeyPress();
 	void selectRect();
+	int eraseShip(int, int);
 public:
 	BattleField(sf::RenderWindow *);
 	void draw();
