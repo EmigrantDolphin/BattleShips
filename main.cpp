@@ -2,6 +2,7 @@
 #include "Menu.h"
 #include "GameMaster.h"
 #include "BattleField.h"
+#include "PlayerVsPlayer.h"
 
 
 #include <iostream>
@@ -9,9 +10,10 @@
 
 sf::RenderWindow window(sf::VideoMode(1000, 500), "Battle Ships");
 Menu menuClass(&window);
-BattleField battleField(&window);
+PlayerVsPlayer pvp(&window);
 
 int main(){
+	GameMaster::state = GameMaster::State::PvP;
 
 	while (window.isOpen()){
 		sf::Event event;
@@ -26,8 +28,10 @@ int main(){
 			case GameMaster::State::Menu :  menuClass.actions();
 											menuClass.draw();
 											break;
+			case GameMaster::State::PvP :	pvp.draw();
+											break;
 		}
-		battleField.draw();
+		pvp.draw();
 		window.display();
 	}
 

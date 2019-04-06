@@ -1,3 +1,6 @@
+#ifndef _BATTLEFIELDH_
+#define _BATTLEFIELDH_
+
 #include <SFML/Graphics.hpp>
 #include <RectShapeEnh.h>
 #include <iostream>
@@ -9,10 +12,8 @@ private:
 	sf::RenderWindow *window;
 	EditState editState = EditState::Vertical;
 	ShipSize selectedShipSize = ShipSize::Five;
+	ShipSize lastErasedShipSize = ShipSize::Two;
 
-	int fiveShipsFree = 1, fourShipsFree = 2, threeShipsFree = 3, twoShipsFree = 4;
-	int fiveShipsPlaced = 0, fourShipsPlaced = 0, threeShipsPlaced = 0, twoShipsPlaced = 0;
-	
 	float posX = 10, posY = 10;
 	static const int FieldWidth = 10, FieldHeight = 10, RectSize = 30, RectThickness = 1;
 	RectShapeEnh fieldArr[FieldWidth][FieldHeight];
@@ -22,7 +23,7 @@ private:
 	
 	void createField();
 
-	int getSelectedShipSize();
+	int getSelectedShipSizeInt();
 	void onMouseHover();
 	void hoverShipH(); //used in onMouseHover to draw hovering ship, not yet placed
 	void hoverShipV();
@@ -30,15 +31,20 @@ private:
 	bool doesVertiFit();
 	bool isNoOneAroundH();// checks if there is no one close in a rectangle surrounding potential ship position
 	bool isNoOneAroundV();
-	void onMouseClick();
-	void onKeyPress();
 	void selectRect();
 	int eraseShip(int, int);
 public:
 	BattleField(sf::RenderWindow *);
 	void draw();
 	void setPos(float, float);
-	void setEdit(EditState);
-	void setShipSize(ShipSize);
+	float getWidthHeight();
+	void setEditState(EditState);
+	void setSelectedShipSize(ShipSize);
+	BattleField::ShipSize getSelectedShipSize();
+	BattleField::ShipSize getLastDeletedShipSize();
+	bool placeShip();
+	bool deleteShip();
 	
 };
+
+#endif
