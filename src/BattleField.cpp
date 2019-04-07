@@ -220,6 +220,9 @@ int BattleField::eraseShip(int x, int y){
 
 
 bool BattleField::deleteShip(){
+	if (selectedRectPos.x == -1)
+		return false;
+	
 	if (editState == EditState::Erase && fieldArr[selectedRectPos.y][selectedRectPos.x].state == RectShapeEnh::State::Alive){
 		int size = eraseShip(selectedRectPos.x, selectedRectPos.y);
 		if (size == 2)

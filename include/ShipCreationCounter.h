@@ -18,11 +18,13 @@ private:
 	float rectThickness = 1;
 	
 	float getShipWidth();
-	
+	void refresh();
 public:
-	ShipCreationCounter(int, int, ShipCreationCounter::ShipSize, int, sf::RenderWindow *);
+	ShipCreationCounter(ShipCreationCounter::ShipSize, int, sf::RenderWindow *);
 	void setShipsLeft(int);
-	float getRectHeight();
+	void setPos(float, float);
+	void setSize(float);
+	float getRectSize();
 	void draw();
 };
 

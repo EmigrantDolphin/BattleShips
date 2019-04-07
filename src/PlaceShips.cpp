@@ -12,10 +12,19 @@ void PlaceShips::init(){
 	battleField->setPos(x, y);
 	
 	
-	this->twoShipCounter = new ShipCreationCounter(counterPosX, counterPosY, ShipCreationCounter::ShipSize::Two, twoShipI, window);
-	this->threeShipCounter = new ShipCreationCounter(counterPosX, counterPosY + counterOffset + counterRectSize, ShipCreationCounter::ShipSize::Three, threeShipI, window);
-	this->fourShipCounter = new ShipCreationCounter(counterPosX, counterPosY + (counterOffset + counterRectSize)*2, ShipCreationCounter::ShipSize::Four, fourShipI, window);
-	this->fiveShipCounter = new ShipCreationCounter(counterPosX, counterPosY + (counterOffset + counterRectSize)*3, ShipCreationCounter::ShipSize::Five, fiveShipI, window);
+	this->twoShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Two, twoShipI, window);
+	this->threeShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Three, threeShipI, window);
+	this->fourShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Four, fourShipI, window);
+	this->fiveShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Five, fiveShipI, window);
+	
+	twoShipCounter->setPos(counterPosX, counterPosY);
+	twoShipCounter->setSize(counterSize);
+	threeShipCounter->setPos(counterPosX, counterPosY + counterOffset + counterSize);
+	threeShipCounter->setSize(counterSize);
+	fourShipCounter->setPos(counterPosX, counterPosY + (counterOffset + counterSize) * 2);
+	fourShipCounter->setSize(counterSize);
+	fiveShipCounter->setPos(counterPosX, counterPosY + (counterOffset + counterSize) * 3);
+	fiveShipCounter->setSize(counterSize);
 	
 }
 

@@ -10,7 +10,7 @@ private:
 	sf::RenderWindow *window;
 	BattleField *battleField;
 	ShipCreationCounter *twoShipCounter, *threeShipCounter, *fourShipCounter, *fiveShipCounter;
-	int counterPosX = 10, counterPosY = 10, counterOffset = 10, counterRectSize = 30;
+	int counterPosX = 10, counterPosY = 10, counterOffset = 10, counterSize = 30;
 	int twoShipI = 4, threeShipI = 3, fourShipI = 2, fiveShipI = 1;
 	sf::Text twoShipT, threeShipT, fourShipT, fiveShipT;
 	
