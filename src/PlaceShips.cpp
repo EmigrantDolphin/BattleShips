@@ -12,19 +12,20 @@ void PlaceShips::init(){
 	battleField->setPos(x, y);
 	
 	
-	this->twoShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Two, twoShipI, window);
-	this->threeShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Three, threeShipI, window);
-	this->fourShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Four, fourShipI, window);
-	this->fiveShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Five, fiveShipI, window);
+	this->twoShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Two, twoShipCountI, window);
+	this->threeShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Three, threeShipCountI, window);
+	this->fourShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Four, fourShipCountI, window);
+	this->fiveShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Five, fiveShipCountI, window);
+	selectShip(BattleField::ShipSize::Five);
 	
 	twoShipCounter->setPos(counterPosX, counterPosY);
-	twoShipCounter->setSize(counterSize);
-	threeShipCounter->setPos(counterPosX, counterPosY + counterOffset + counterSize);
-	threeShipCounter->setSize(counterSize);
-	fourShipCounter->setPos(counterPosX, counterPosY + (counterOffset + counterSize) * 2);
-	fourShipCounter->setSize(counterSize);
-	fiveShipCounter->setPos(counterPosX, counterPosY + (counterOffset + counterSize) * 3);
-	fiveShipCounter->setSize(counterSize);
+	twoShipCounter->setSize(counterRectSize);
+	threeShipCounter->setPos(counterPosX, counterPosY + counterOffset + counterRectSize);
+	threeShipCounter->setSize(counterRectSize);
+	fourShipCounter->setPos(counterPosX, counterPosY + (counterOffset + counterRectSize) * 2);
+	fourShipCounter->setSize(counterRectSize);
+	fiveShipCounter->setPos(counterPosX, counterPosY + (counterOffset + counterRectSize) * 3);
+	fiveShipCounter->setSize(counterRectSize);
 	
 }
 
@@ -59,48 +60,82 @@ void PlaceShips::onMouseClick(){
 	if (battleField->deleteShip())
 		shipDeleted(battleField->getLastDeletedShipSize());
 	
+	if (twoShipCounter->isMouseOver())
+		selectShip(BattleField::ShipSize::Two);
+	if (threeShipCounter->isMouseOver())
+		selectShip(BattleField::ShipSize::Three);
+	if (fourShipCounter->isMouseOver())
+		selectShip(BattleField::ShipSize::Four);
+	if (fiveShipCounter->isMouseOver())
+		selectShip(BattleField::ShipSize::Five);
+	
+	
+}
+
+void PlaceShips::selectShip(BattleField::ShipSize shipSize){
+	twoShipCounter->deselect();
+	threeShipCounter->deselect();
+	fourShipCounter->deselect();
+	fiveShipCounter->deselect();
+	
+	if (shipSize == BattleField::ShipSize::Two){
+		battleField->setSelectedShipSize(BattleField::ShipSize::Two);
+		twoShipCounter->select();
+	}
+	if (shipSize == BattleField::ShipSize::Three){
+		battleField->setSelectedShipSize(BattleField::ShipSize::Three);
+		threeShipCounter->select();
+	}
+	if (shipSize == BattleField::ShipSize::Four){
+		battleField->setSelectedShipSize(BattleField::ShipSize::Four);
+		fourShipCounter->select();
+	}
+	if (shipSize == BattleField::ShipSize::Five){
+		battleField->setSelectedShipSize(BattleField::ShipSize::Five);
+		fiveShipCounter->select();
+	}
 }
 
 bool PlaceShips::haveShip(){
-	if (battleField->getSelectedShipSize() == BattleField::ShipSize::Two && twoShipI > 0)
+	if (battleField->getSelectedShipSize() == BattleField::ShipSize::Two && twoShipCountI > 0)
 		return true;
-	if (battleField->getSelectedShipSize() == BattleField::ShipSize::Three && threeShipI > 0)
+	if (battleField->getSelectedShipSize() == BattleField::ShipSize::Three && threeShipCountI > 0)
 		return true;
-	if (battleField->getSelectedShipSize() == BattleField::ShipSize::Four && fourShipI > 0)
+	if (battleField->getSelectedShipSize() == BattleField::ShipSize::Four && fourShipCountI > 0)
 		return true;
-	if (battleField->getSelectedShipSize() == BattleField::ShipSize::Five && fiveShipI > 0)
+	if (battleField->getSelectedShipSize() == BattleField::ShipSize::Five && fiveShipCountI > 0)
 		return true;
 	return false;
 }
 
 void PlaceShips::shipDeleted(BattleField::ShipSize shipSize){
 	if (shipSize == BattleField::ShipSize::Two)
-		twoShipI++;
+		twoShipCountI++;
 	if (shipSize == BattleField::ShipSize::Three)
-		threeShipI++;
+		threeShipCountI++;
 	if (shipSize == BattleField::ShipSize::Four)
-		fourShipI++;
+		fourShipCountI++;
 	if (shipSize == BattleField::ShipSize::Five)
-		fiveShipI++;
-	twoShipCounter->setShipsLeft(twoShipI);
-	threeShipCounter->setShipsLeft(threeShipI);
-	fourShipCounter->setShipsLeft(fourShipI);
-	fiveShipCounter->setShipsLeft(fiveShipI);
+		fiveShipCountI++;
+	twoShipCounter->setShipsLeft(twoShipCountI);
+	threeShipCounter->setShipsLeft(threeShipCountI);
+	fourShipCounter->setShipsLeft(fourShipCountI);
+	fiveShipCounter->setShipsLeft(fiveShipCountI);
 }
 
 void PlaceShips::shipPlaced(BattleField::ShipSize shipSize){
 	if (shipSize == BattleField::ShipSize::Two)
-		twoShipI--;
+		twoShipCountI--;
 	if (shipSize == BattleField::ShipSize::Three)
-		threeShipI--;
+		threeShipCountI--;
 	if (shipSize == BattleField::ShipSize::Four)
-		fourShipI--;
+		fourShipCountI--;
 	if (shipSize == BattleField::ShipSize::Five)
-		fiveShipI--;
-	twoShipCounter->setShipsLeft(twoShipI);
-	threeShipCounter->setShipsLeft(threeShipI);
-	fourShipCounter->setShipsLeft(fourShipI);
-	fiveShipCounter->setShipsLeft(fiveShipI);
+		fiveShipCountI--;
+	twoShipCounter->setShipsLeft(twoShipCountI);
+	threeShipCounter->setShipsLeft(threeShipCountI);
+	fourShipCounter->setShipsLeft(fourShipCountI);
+	fiveShipCounter->setShipsLeft(fiveShipCountI);
 }
 
 void PlaceShips::draw(){

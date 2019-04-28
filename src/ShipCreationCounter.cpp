@@ -34,6 +34,23 @@ void ShipCreationCounter::draw(){
 		window->draw(rect[i]);
 	window->draw(text);
 }
+void ShipCreationCounter::select(){
+		for (int i = 0; i < shipSize+2; i++)
+			rect[i].setFillColor(sf::Color::Green);
+}
+void ShipCreationCounter::deselect(){
+	for (int i = 0; i < shipSize+2; i++)
+			rect[i].setFillColor(sf::Color::White);
+}
+bool ShipCreationCounter::isMouseOver(){
+	sf::Vector2i mousePos = (sf::Vector2i)sf::Mouse::getPosition(*window);
+	sf::IntRect ship(posX, posY, getShipWidth(), rectSize); 
+	if (ship.contains(mousePos))
+		return true;
+	return false;
+}
+
+//SET GET
 void ShipCreationCounter::setShipsLeft(int shipsLeft){
 	text.setString("x "+std::to_string(shipsLeft));
 }
@@ -41,7 +58,10 @@ float ShipCreationCounter::getShipWidth(){
 	return rectSize * (shipSize+2);
 }
 
-float ShipCreationCounter::getRectSize(){
+float ShipCreationCounter::getWidth(){
+	return getShipWidth();
+}
+float ShipCreationCounter::getHeight(){
 	return rectSize;
 }
 

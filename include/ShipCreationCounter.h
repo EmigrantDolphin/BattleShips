@@ -1,3 +1,8 @@
+/*
+this is used in PlaceShips class, to visualize the amount of ships left;
+draws ShipSize::n rectangles in specified position and write xM how many left;
+*/
+
 #ifndef _SHIPCREATIONCOUNTERH_
 #define _SHIPCREATIONCOUNTERH_
 
@@ -24,7 +29,11 @@ public:
 	void setShipsLeft(int);
 	void setPos(float, float);
 	void setSize(float);
-	float getRectSize();
+	bool isMouseOver();
+	void select();
+	void deselect();
+	float getWidth();
+	float getHeight();
 	void draw();
 };
 
