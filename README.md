@@ -8,7 +8,7 @@ On Linux:
 
 sudo apt-get install libsfml-dev
 
-./BattleShips.out
+./BattleShipsL.out
 
 
 
