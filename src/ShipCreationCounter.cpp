@@ -1,6 +1,6 @@
 #include "ShipCreationCounter.h"
 
-ShipCreationCounter::ShipCreationCounter(ShipCreationCounter::ShipSize shipSize, int shipsLeft, sf::RenderWindow *window){
+ShipCreationCounter::ShipCreationCounter(ShipCreationCounter::ShipSize shipSize, int shipsLeft, sf::RenderWindow *window, BattleField::ShipSize *selectedShip){
 	this->window = window;
 	this->shipSize = shipSize;
 	rect = new sf::RectangleShape[shipSize+2];
@@ -49,6 +49,8 @@ bool ShipCreationCounter::isMouseOver(){
 		return true;
 	return false;
 }
+
+void ShipCreationCounter::onMouseClick(){}
 
 //SET GET
 void ShipCreationCounter::setShipsLeft(int shipsLeft){

@@ -12,10 +12,10 @@ void PlaceShips::init(){
 	battleField->setPos(x, y);
 	
 	
-	this->twoShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Two, twoShipCountI, window);
-	this->threeShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Three, threeShipCountI, window);
-	this->fourShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Four, fourShipCountI, window);
-	this->fiveShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Five, fiveShipCountI, window);
+	this->twoShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Two, twoShipCountI, window, &selectedShip);
+	this->threeShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Three, threeShipCountI, window, &selectedShip);
+	this->fourShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Four, fourShipCountI, window, &selectedShip);
+	this->fiveShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Five, fiveShipCountI, window, &selectedShip);
 	selectShip(BattleField::ShipSize::Five);
 	
 	twoShipCounter->setPos(counterPosX, counterPosY);

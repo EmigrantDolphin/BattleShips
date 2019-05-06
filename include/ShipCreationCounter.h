@@ -7,9 +7,10 @@ draws ShipSize::n rectangles in specified position and write xM how many left;
 #define _SHIPCREATIONCOUNTERH_
 
 #include <SFML/Graphics.hpp>
-
-
-class ShipCreationCounter{
+#include "IDrawable.h"
+#include "IClickable.h"
+#include "BattleField.h"
+class ShipCreationCounter : public IDrawable, public IClickable{
 public:
 	enum ShipSize {Two, Three, Four, Five};
 private:
@@ -25,11 +26,12 @@ private:
 	float getShipWidth();
 	void refresh();
 public:
-	ShipCreationCounter(ShipCreationCounter::ShipSize, int, sf::RenderWindow *);
+	ShipCreationCounter(ShipCreationCounter::ShipSize, int, sf::RenderWindow *, BattleField::ShipSize *);
 	void setShipsLeft(int);
 	void setPos(float, float);
 	void setSize(float);
 	bool isMouseOver();
+	void onMouseClick();
 	void select();
 	void deselect();
 	float getWidth();

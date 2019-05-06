@@ -10,15 +10,17 @@ is populated directly
 #include <SFML/Graphics.hpp>
 #include "BattleField.h"
 #include "ShipCreationCounter.h"
+#include "IDrawable.h"
 
-class PlaceShips{
+class PlaceShips : public IDrawable{
 private:
 	sf::RenderWindow *window;
 	BattleField *battleField;
 	ShipCreationCounter *twoShipCounter, *threeShipCounter, *fourShipCounter, *fiveShipCounter;
 	const int counterPosX = 10, counterPosY = 10, counterOffset = 10, counterRectSize = 30;
 	int twoShipCountI = 4, threeShipCountI = 3, fourShipCountI = 2, fiveShipCountI = 1;
-	
+	BattleField::ShipSize selectedShip = BattleField::ShipSize::Five;
+
 	void init();
 	void onKeyPress();
 	void onMouseClick();
