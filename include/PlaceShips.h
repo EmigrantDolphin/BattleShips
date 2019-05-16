@@ -11,15 +11,20 @@ is populated directly
 #include "BattleField.h"
 #include "ShipCreationCounter.h"
 #include "IDrawable.h"
+#include "Button.h"
+
+#define countersI 4
 
 class PlaceShips : public IDrawable{
 private:
 	sf::RenderWindow *window;
 	BattleField *battleField;
 	ShipCreationCounter *twoShipCounter, *threeShipCounter, *fourShipCounter, *fiveShipCounter;
+	IDrawable *shipCountersDrawable[countersI]; // 4, nes 4 counter'iai
+	IClickable *shipCountersClickable[countersI];
 	const int counterPosX = 10, counterPosY = 10, counterOffset = 10, counterRectSize = 30;
 	int twoShipCountI = 4, threeShipCountI = 3, fourShipCountI = 2, fiveShipCountI = 1;
-	BattleField::ShipSize selectedShip = BattleField::ShipSize::Five;
+	BattleField::ShipSize *selectedShip;
 
 	void init();
 	void onKeyPress();
@@ -27,7 +32,6 @@ private:
 	bool haveShip();
 	void shipPlaced(BattleField::ShipSize);
 	void shipDeleted(BattleField::ShipSize);
-	void selectShip(BattleField::ShipSize);
 public:
 	PlaceShips(sf::RenderWindow *, BattleField *);
 	void draw();

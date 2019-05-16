@@ -40,6 +40,7 @@ public:
 	float getWidthHeight();
 	void setEditState(EditState);
 	void setSelectedShipSize(ShipSize);
+	BattleField::ShipSize* getSelectedShipRef();
 	BattleField::ShipSize getSelectedShipSize();
 	BattleField::ShipSize getLastDeletedShipSize();
 	bool placeShip();

@@ -10,13 +10,13 @@ void PlaceShips::init(){
 	float x = window->getSize().x / 2 - battleField->getWidthHeight() /2;
 	float y = (window->getSize().y - battleField->getWidthHeight()) / 2;
 	battleField->setPos(x, y);
+	this->selectedShip = battleField->getSelectedShipRef();
 	
 	
-	this->twoShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Two, twoShipCountI, window, &selectedShip);
-	this->threeShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Three, threeShipCountI, window, &selectedShip);
-	this->fourShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Four, fourShipCountI, window, &selectedShip);
-	this->fiveShipCounter = new ShipCreationCounter(ShipCreationCounter::ShipSize::Five, fiveShipCountI, window, &selectedShip);
-	selectShip(BattleField::ShipSize::Five);
+	this->twoShipCounter = new ShipCreationCounter(BattleField::ShipSize::Two, twoShipCountI, window, selectedShip);
+	this->threeShipCounter = new ShipCreationCounter(BattleField::ShipSize::Three, threeShipCountI, window, selectedShip);
+	this->fourShipCounter = new ShipCreationCounter(BattleField::ShipSize::Four, fourShipCountI, window, selectedShip);
+	this->fiveShipCounter = new ShipCreationCounter(BattleField::ShipSize::Five, fiveShipCountI, window, selectedShip);
 	
 	twoShipCounter->setPos(counterPosX, counterPosY);
 	twoShipCounter->setSize(counterRectSize);
@@ -27,6 +27,15 @@ void PlaceShips::init(){
 	fiveShipCounter->setPos(counterPosX, counterPosY + (counterOffset + counterRectSize) * 3);
 	fiveShipCounter->setSize(counterRectSize);
 	
+	shipCountersDrawable[0] = twoShipCounter;
+	shipCountersDrawable[1] = threeShipCounter;
+	shipCountersDrawable[2] = fourShipCounter;
+	shipCountersDrawable[3] = fiveShipCounter;
+	
+	shipCountersClickable[0] = twoShipCounter;
+	shipCountersClickable[1] = threeShipCounter;
+	shipCountersClickable[2] = fourShipCounter;
+	shipCountersClickable[3] = fiveShipCounter;
 }
 
 
@@ -60,41 +69,11 @@ void PlaceShips::onMouseClick(){
 	if (battleField->deleteShip())
 		shipDeleted(battleField->getLastDeletedShipSize());
 	
-	if (twoShipCounter->isMouseOver())
-		selectShip(BattleField::ShipSize::Two);
-	if (threeShipCounter->isMouseOver())
-		selectShip(BattleField::ShipSize::Three);
-	if (fourShipCounter->isMouseOver())
-		selectShip(BattleField::ShipSize::Four);
-	if (fiveShipCounter->isMouseOver())
-		selectShip(BattleField::ShipSize::Five);
-	
+	for (int i = 0; i < countersI; i++)
+		shipCountersClickable[i]->onMouseClick();
 	
 }
 
-void PlaceShips::selectShip(BattleField::ShipSize shipSize){
-	twoShipCounter->deselect();
-	threeShipCounter->deselect();
-	fourShipCounter->deselect();
-	fiveShipCounter->deselect();
-	
-	if (shipSize == BattleField::ShipSize::Two){
-		battleField->setSelectedShipSize(BattleField::ShipSize::Two);
-		twoShipCounter->select();
-	}
-	if (shipSize == BattleField::ShipSize::Three){
-		battleField->setSelectedShipSize(BattleField::ShipSize::Three);
-		threeShipCounter->select();
-	}
-	if (shipSize == BattleField::ShipSize::Four){
-		battleField->setSelectedShipSize(BattleField::ShipSize::Four);
-		fourShipCounter->select();
-	}
-	if (shipSize == BattleField::ShipSize::Five){
-		battleField->setSelectedShipSize(BattleField::ShipSize::Five);
-		fiveShipCounter->select();
-	}
-}
 
 bool PlaceShips::haveShip(){
 	if (battleField->getSelectedShipSize() == BattleField::ShipSize::Two && twoShipCountI > 0)
@@ -141,10 +120,10 @@ void PlaceShips::shipPlaced(BattleField::ShipSize shipSize){
 void PlaceShips::draw(){
 	onKeyPress();
 	onMouseClick();
+	
+	for (int i = 0; i < countersI; i++)
+		shipCountersDrawable[i]->draw();
 	battleField->draw();
-	twoShipCounter->draw();
-	threeShipCounter->draw();
-	fourShipCounter->draw();
-	fiveShipCounter->draw();
+	
 	
 }

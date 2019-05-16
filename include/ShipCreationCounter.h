@@ -18,15 +18,16 @@ private:
 	sf::RectangleShape *rect;
 	sf::Font font;
 	sf::Text text;
-	ShipSize shipSize = ShipSize::Two;
+	BattleField::ShipSize shipSize = BattleField::ShipSize::Two;
 	float posX = 0, posY = 0;
 	float rectSize = 30;
 	float rectThickness = 1;
+	BattleField::ShipSize *selectedShip;
 	
 	float getShipWidth();
 	void refresh();
 public:
-	ShipCreationCounter(ShipCreationCounter::ShipSize, int, sf::RenderWindow *, BattleField::ShipSize *);
+	ShipCreationCounter(BattleField::ShipSize, int, sf::RenderWindow *, BattleField::ShipSize *);
 	void setShipsLeft(int);
 	void setPos(float, float);
 	void setSize(float);

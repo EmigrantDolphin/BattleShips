@@ -133,6 +133,9 @@ BattleField::ShipSize BattleField::getSelectedShipSize(){
 BattleField::ShipSize BattleField::getLastDeletedShipSize(){
 	return lastErasedShipSize;
 }
+BattleField::ShipSize* BattleField::getSelectedShipRef(){
+	return &selectedShipSize;
+}
 
 bool BattleField::isNoOneAroundH(){
 	if (!doesHorizFit())

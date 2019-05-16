@@ -23,7 +23,6 @@ int main(){
 		}
 
 		window.clear(sf::Color::White);	
-		
 		switch (GameMaster::state){
 			case GameMaster::State::Menu :  menuClass.actions();
 											menuClass.draw();
@@ -31,7 +30,6 @@ int main(){
 			case GameMaster::State::PvP :	pvp.draw();
 											break;
 		}
-		pvp.draw();
 		window.display();
 	}
 

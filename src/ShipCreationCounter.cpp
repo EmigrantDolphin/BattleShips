@@ -1,8 +1,10 @@
 #include "ShipCreationCounter.h"
 
-ShipCreationCounter::ShipCreationCounter(ShipCreationCounter::ShipSize shipSize, int shipsLeft, sf::RenderWindow *window, BattleField::ShipSize *selectedShip){
+ShipCreationCounter::ShipCreationCounter(BattleField::ShipSize shipSize, int shipsLeft, sf::RenderWindow *window, BattleField::ShipSize *selectedShip){
 	this->window = window;
 	this->shipSize = shipSize;
+	this->selectedShip = selectedShip;
+
 	rect = new sf::RectangleShape[shipSize+2];
 	font.loadFromFile("fonts/arial.ttf");
 	text.setFont(font);
@@ -17,7 +19,8 @@ ShipCreationCounter::ShipCreationCounter(ShipCreationCounter::ShipSize shipSize,
 		rect[i].setOutlineColor(sf::Color::Black);
 		rect[i].setPosition(posX + (i * rectSize), posY);
 	}
-
+	if (*selectedShip == shipSize)
+		select();
 }
 
 void ShipCreationCounter::refresh(){
@@ -50,7 +53,13 @@ bool ShipCreationCounter::isMouseOver(){
 	return false;
 }
 
-void ShipCreationCounter::onMouseClick(){}
+void ShipCreationCounter::onMouseClick(){
+	if (isMouseOver()){
+		*selectedShip = shipSize;
+		select();
+	}else if (*selectedShip != shipSize)
+		deselect();
+}
 
 //SET GET
 void ShipCreationCounter::setShipsLeft(int shipsLeft){
