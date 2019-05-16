@@ -9,6 +9,7 @@ On Linux:
 sudo apt-get install libsfml-dev
 
 ./LinCompile.sh compile    to compile
+
 ./LinCompile.sh compile run     to compile and run
 
 ./BattleShipsL.out      just to run oldest compiled version
