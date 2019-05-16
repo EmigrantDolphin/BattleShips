@@ -9,12 +9,13 @@
 
 
 sf::RenderWindow window(sf::VideoMode(1000, 500), "Battle Ships");
-Menu menuClass(&window);
-PlayerVsPlayer pvp(&window);
 
 int main(){
 	GameMaster::state = GameMaster::State::PvP;
-
+	GameMaster::windowSize = (sf::Vector2f)window.getSize();
+	Menu menuClass;
+	PlayerVsPlayer pvp;
+	
 	while (window.isOpen()){
 		sf::Event event;
 		while (window.pollEvent(event)){
@@ -23,11 +24,11 @@ int main(){
 		}
 
 		window.clear(sf::Color::White);	
+		GameMaster::mousePosition = (sf::Vector2f)sf::Mouse::getPosition(window);
 		switch (GameMaster::state){
-			case GameMaster::State::Menu :  menuClass.actions();
-											menuClass.draw();
+			case GameMaster::State::Menu :	menuClass.draw(window);
 											break;
-			case GameMaster::State::PvP :	pvp.draw();
+			case GameMaster::State::PvP :	pvp.draw(window);
 											break;
 		}
 		window.display();

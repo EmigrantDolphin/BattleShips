@@ -1,14 +1,13 @@
 #include "Menu.h"
 
 
-Menu::Menu(sf::RenderWindow *window){
-	this->window = window;
+Menu::Menu(){
 	Menu::setText();
 }
 
 void Menu::setText(){
-	int centerX = window->getSize().x / 2;
-	int initialY = window->getSize().y / 4;
+	int centerX = GameMaster::windowSize.x / 2;
+	int initialY = GameMaster::windowSize.y / 4;
 	int textOffset = 100;	
 	int textSize = 30;
 	font.loadFromFile("fonts/arial.ttf");
@@ -37,7 +36,7 @@ void Menu::setText(){
 
 
 void Menu::actions(){
-	sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(*window);
+	sf::Vector2f mousePos = GameMaster::mousePosition;
 	
 	if (textPvP.getGlobalBounds().contains(mousePos))
 		textPvP.setFillColor(sf::Color::Black);
@@ -55,10 +54,10 @@ void Menu::actions(){
 		textExit.setFillColor(sf::Color::Green);
 }
 
-void Menu::draw(){
-	
-	window->draw(textPvC);
-	window->draw(textExit);
-	window->draw(textPvP);
+void Menu::draw(sf::RenderWindow &window){
+	actions();
+	window.draw(textPvC);
+	window.draw(textExit);
+	window.draw(textPvP);
 }
 

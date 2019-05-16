@@ -1,22 +1,21 @@
 #include "PlaceShips.h"
 
-PlaceShips::PlaceShips(sf::RenderWindow *window, BattleField *battleField){
-	this->window = window;
+PlaceShips::PlaceShips(BattleField *battleField){
 	this->battleField = battleField;
 	init();
 }
 
 void PlaceShips::init(){
-	float x = window->getSize().x / 2 - battleField->getWidthHeight() /2;
-	float y = (window->getSize().y - battleField->getWidthHeight()) / 2;
+	float x = GameMaster::windowSize.x / 2 - battleField->getWidthHeight() /2;
+	float y = (GameMaster::windowSize.y - battleField->getWidthHeight()) / 2;
 	battleField->setPos(x, y);
 	this->selectedShip = battleField->getSelectedShipRef();
 	
 	
-	this->twoShipCounter = new ShipCreationCounter(BattleField::ShipSize::Two, twoShipCountI, window, selectedShip);
-	this->threeShipCounter = new ShipCreationCounter(BattleField::ShipSize::Three, threeShipCountI, window, selectedShip);
-	this->fourShipCounter = new ShipCreationCounter(BattleField::ShipSize::Four, fourShipCountI, window, selectedShip);
-	this->fiveShipCounter = new ShipCreationCounter(BattleField::ShipSize::Five, fiveShipCountI, window, selectedShip);
+	this->twoShipCounter = new ShipCreationCounter(BattleField::ShipSize::Two, twoShipCountI, selectedShip);
+	this->threeShipCounter = new ShipCreationCounter(BattleField::ShipSize::Three, threeShipCountI, selectedShip);
+	this->fourShipCounter = new ShipCreationCounter(BattleField::ShipSize::Four, fourShipCountI, selectedShip);
+	this->fiveShipCounter = new ShipCreationCounter(BattleField::ShipSize::Five, fiveShipCountI, selectedShip);
 	
 	twoShipCounter->setPos(counterPosX, counterPosY);
 	twoShipCounter->setSize(counterRectSize);
@@ -36,8 +35,25 @@ void PlaceShips::init(){
 	shipCountersClickable[1] = threeShipCounter;
 	shipCountersClickable[2] = fourShipCounter;
 	shipCountersClickable[3] = fiveShipCounter;
+	
+	//auto HFunc = [&](void){ battleField->setEditState(BattleField::EditState::Horizontal); };
+	HButton = new Button([&](void){ battleField->setEditState(BattleField::EditState::Horizontal); });
+	HButton->setText("H");
+	HButton->setPosition(counterPosX, counterPosY + (counterOffset + counterRectSize) * 4);
+	
+	VButton = new Button([&](void){ battleField->setEditState(BattleField::EditState::Vertical); });
+	VButton->setText("V");
+	VButton->setWidth(HButton->getWidth());
+	VButton->setPosition(counterPosX + HButton->getWidth()+buttonOffset, counterPosY + (counterOffset + counterRectSize) * 4);
+	
+	
+	EButton = new Button([&](void){ battleField->setEditState(BattleField::EditState::Erase); });
+	EButton->setText("E");
+	EButton->setWidth(HButton->getWidth());
+	EButton->setPosition(counterPosX + VButton->getWidth()*2+buttonOffset*2, counterPosY + (counterOffset + counterRectSize) * 4);
+	
+	VButton->select();
 }
-
 
 
 void PlaceShips::onKeyPress(){
@@ -72,6 +88,25 @@ void PlaceShips::onMouseClick(){
 	for (int i = 0; i < countersI; i++)
 		shipCountersClickable[i]->onMouseClick();
 	
+	
+	
+	HButton->onMouseClick();
+	if (battleField->getEditState() == BattleField::EditState::Horizontal)
+		HButton->select();
+	else
+		HButton->deselect();
+	
+	VButton->onMouseClick();
+	if (battleField->getEditState() == BattleField::EditState::Vertical)
+		VButton->select();
+	else
+		VButton->deselect();
+	
+	EButton->onMouseClick();
+	if (battleField->getEditState() == BattleField::EditState::Erase)
+		EButton->select();
+	else
+		EButton->deselect();
 }
 
 
@@ -117,13 +152,14 @@ void PlaceShips::shipPlaced(BattleField::ShipSize shipSize){
 	fiveShipCounter->setShipsLeft(fiveShipCountI);
 }
 
-void PlaceShips::draw(){
+void PlaceShips::draw(sf::RenderWindow &window){
 	onKeyPress();
 	onMouseClick();
 	
 	for (int i = 0; i < countersI; i++)
-		shipCountersDrawable[i]->draw();
-	battleField->draw();
-	
-	
+		shipCountersDrawable[i]->draw(window);
+	battleField->draw(window);
+	HButton->draw(window);
+	VButton->draw(window);
+	EButton->draw(window);
 }

@@ -2,26 +2,35 @@
 #define _BUTTONH_
 
 #include <SFML/Graphics.hpp>
+#include "GameMaster.h"
 #include "IDrawable.h"
 #include "IClickable.h"
-#include <string>
+#include <functional>
+#include <iostream>
 
 class Button : public IDrawable, public IClickable{
 private:
-	void (* callback)();
+	std::function<void (void)> func;
 	sf::Text text;
 	sf::RectangleShape border;
 	sf::Font font;
 	float textSize;
 	float borderThickness;
 	
+	
 public:
-	Button(void (*)());
-	void draw();
+	Button(std::function<void (void)>);
+	void draw(sf::RenderWindow &);
 	void onMouseClick();
 	
 	void setPosition(float, float);
 	void setText(std::string);
+	void setWidth(float);
+	
+	void select();
+	void deselect();
+	
+	float getWidth();
 };
 
 #endif

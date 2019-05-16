@@ -1,8 +1,7 @@
 #include "BattleField.h"
 
 
-BattleField::BattleField(sf::RenderWindow *window){
-	this->window = window;
+BattleField::BattleField(){
 	selectedRectPos.x = -1;
 	selectedRectPos.y = -1;
 	createField();
@@ -24,7 +23,7 @@ void BattleField::createField(){
 		}
 }
 
-void BattleField::draw(){
+void BattleField::draw(sf::RenderWindow &window){
 	for (int i = 0; i < FieldHeight; i++)
 		for (int j = 0; j < FieldWidth; j++){
 			//if [cell state] then depending on cell state
@@ -37,10 +36,10 @@ void BattleField::draw(){
 	selectRect();
 	onMouseHover();
 	
-	window->draw(fieldBounds);
+	window.draw(fieldBounds);
 	for (int i = 0; i < FieldHeight; i++)
 		for (int j = 0; j < FieldWidth; j++){
-			window->draw(fieldArr[i][j]);
+			window.draw(fieldArr[i][j]);
 		}
 		
 }
@@ -60,7 +59,7 @@ void BattleField::setEditState(EditState state){
 }
 
 void BattleField::selectRect(){
-	sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(*window);
+	sf::Vector2f mousePos = GameMaster::mousePosition;
 	for (int i = 0; i < FieldHeight; i++)
 		for (int j = 0; j < FieldWidth; j++){
 			if (fieldArr[i][j].getGlobalBounds().contains(mousePos)){
@@ -135,6 +134,9 @@ BattleField::ShipSize BattleField::getLastDeletedShipSize(){
 }
 BattleField::ShipSize* BattleField::getSelectedShipRef(){
 	return &selectedShipSize;
+}
+BattleField::EditState BattleField::getEditState(){
+	return editState;
 }
 
 bool BattleField::isNoOneAroundH(){

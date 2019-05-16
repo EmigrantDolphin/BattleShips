@@ -3,13 +3,12 @@
 
 class Menu{
 private:
-	sf::RenderWindow *window;
 	sf::Text textPvP, textPvC, textExit;
 	sf::Font font;
 	void setText();
 public:
-	Menu(sf::RenderWindow *);
-	void draw();
+	Menu();
+	void draw(sf::RenderWindow &);
 	void actions();
 	
 };

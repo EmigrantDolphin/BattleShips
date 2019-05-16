@@ -7,6 +7,7 @@ draws ShipSize::n rectangles in specified position and write xM how many left;
 #define _SHIPCREATIONCOUNTERH_
 
 #include <SFML/Graphics.hpp>
+#include "GameMaster.h"
 #include "IDrawable.h"
 #include "IClickable.h"
 #include "BattleField.h"
@@ -14,7 +15,6 @@ class ShipCreationCounter : public IDrawable, public IClickable{
 public:
 	enum ShipSize {Two, Three, Four, Five};
 private:
-	sf::RenderWindow *window;
 	sf::RectangleShape *rect;
 	sf::Font font;
 	sf::Text text;
@@ -27,7 +27,7 @@ private:
 	float getShipWidth();
 	void refresh();
 public:
-	ShipCreationCounter(BattleField::ShipSize, int, sf::RenderWindow *, BattleField::ShipSize *);
+	ShipCreationCounter(BattleField::ShipSize, int, BattleField::ShipSize *);
 	void setShipsLeft(int);
 	void setPos(float, float);
 	void setSize(float);
@@ -37,7 +37,7 @@ public:
 	void deselect();
 	float getWidth();
 	float getHeight();
-	void draw();
+	void draw(sf::RenderWindow &);
 };
 
 #endif

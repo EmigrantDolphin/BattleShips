@@ -2,6 +2,7 @@
 #define _BATTLEFIELDH_
 
 #include <SFML/Graphics.hpp>
+#include "GameMaster.h"
 #include <RectShapeEnh.h>
 #include <iostream>
 class BattleField{
@@ -9,7 +10,6 @@ public:
 	enum EditState {Horizontal, Vertical, Erase, None};
 	enum ShipSize {Two, Three, Four, Five};
 private:
-	sf::RenderWindow *window;
 	EditState editState = EditState::Vertical;
 	ShipSize selectedShipSize = ShipSize::Five;
 	ShipSize lastErasedShipSize = ShipSize::Two;
@@ -34,11 +34,12 @@ private:
 	void selectRect();
 	int eraseShip(int, int);
 public:
-	BattleField(sf::RenderWindow *);
-	void draw();
+	BattleField();
+	void draw(sf::RenderWindow &);
 	void setPos(float, float);
 	float getWidthHeight();
 	void setEditState(EditState);
+	BattleField::EditState getEditState();
 	void setSelectedShipSize(ShipSize);
 	BattleField::ShipSize* getSelectedShipRef();
 	BattleField::ShipSize getSelectedShipSize();

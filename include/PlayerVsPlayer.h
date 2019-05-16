@@ -4,12 +4,12 @@
 #include <SFML/Graphics.hpp>
 #include "BattleField.h"
 #include "PlaceShips.h"
+#include "IDrawable.h"
 
-class PlayerVsPlayer{
+class PlayerVsPlayer : public IDrawable{
 public:
 	enum State{EditingP1, EditingP2, Playing};
 private:
-	sf::RenderWindow *window;
 	State state = State::EditingP1;
 	BattleField *player1;
 	BattleField *player2;
@@ -18,9 +18,9 @@ private:
 	
 	
 public:
-	PlayerVsPlayer(sf::RenderWindow *);
+	PlayerVsPlayer();
 	
-	void draw();
+	void draw(sf::RenderWindow &);
 
 };
 

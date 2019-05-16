@@ -1,7 +1,6 @@
 #include "ShipCreationCounter.h"
 
-ShipCreationCounter::ShipCreationCounter(BattleField::ShipSize shipSize, int shipsLeft, sf::RenderWindow *window, BattleField::ShipSize *selectedShip){
-	this->window = window;
+ShipCreationCounter::ShipCreationCounter(BattleField::ShipSize shipSize, int shipsLeft, BattleField::ShipSize *selectedShip){
 	this->shipSize = shipSize;
 	this->selectedShip = selectedShip;
 
@@ -32,10 +31,10 @@ void ShipCreationCounter::refresh(){
 }
 
 
-void ShipCreationCounter::draw(){
+void ShipCreationCounter::draw(sf::RenderWindow &window){
 	for (int i = 0; i < shipSize+2; i++)
-		window->draw(rect[i]);
-	window->draw(text);
+		window.draw(rect[i]);
+	window.draw(text);
 }
 void ShipCreationCounter::select(){
 		for (int i = 0; i < shipSize+2; i++)
@@ -46,7 +45,7 @@ void ShipCreationCounter::deselect(){
 			rect[i].setFillColor(sf::Color::White);
 }
 bool ShipCreationCounter::isMouseOver(){
-	sf::Vector2i mousePos = (sf::Vector2i)sf::Mouse::getPosition(*window);
+	sf::Vector2i mousePos = (sf::Vector2i)GameMaster::mousePosition;
 	sf::IntRect ship(posX, posY, getShipWidth(), rectSize); 
 	if (ship.contains(mousePos))
 		return true;
