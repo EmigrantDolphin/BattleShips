@@ -13,16 +13,14 @@ is populated directly
 #include "ShipCreationCounter.h"
 #include "IDrawable.h"
 #include "Button.h"
-#include <iostream>
-
-#define countersI 4
+#include <vector>
 
 class PlaceShips : public IDrawable{
 private:
 	BattleField *battleField;
+	std::vector<IDrawable *> drawables;
+	std::vector<IClickable *> clickables;
 	ShipCreationCounter *twoShipCounter, *threeShipCounter, *fourShipCounter, *fiveShipCounter;
-	IDrawable *shipCountersDrawable[countersI]; // 4, nes 4 counter'iai
-	IClickable *shipCountersClickable[countersI];
 	const int counterPosX = 10, counterPosY = 10, counterOffset = 10, counterRectSize = 30;
 	int twoShipCountI = 4, threeShipCountI = 3, fourShipCountI = 2, fiveShipCountI = 1;
 	BattleField::ShipSize *selectedShip;

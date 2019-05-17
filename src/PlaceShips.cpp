@@ -26,15 +26,15 @@ void PlaceShips::init(){
 	fiveShipCounter->setPos(counterPosX, counterPosY + (counterOffset + counterRectSize) * 3);
 	fiveShipCounter->setSize(counterRectSize);
 	
-	shipCountersDrawable[0] = twoShipCounter;
-	shipCountersDrawable[1] = threeShipCounter;
-	shipCountersDrawable[2] = fourShipCounter;
-	shipCountersDrawable[3] = fiveShipCounter;
+	drawables.push_back(twoShipCounter);
+	drawables.push_back(threeShipCounter);
+	drawables.push_back(fourShipCounter);
+	drawables.push_back(fiveShipCounter);
 	
-	shipCountersClickable[0] = twoShipCounter;
-	shipCountersClickable[1] = threeShipCounter;
-	shipCountersClickable[2] = fourShipCounter;
-	shipCountersClickable[3] = fiveShipCounter;
+	clickables.push_back(twoShipCounter);
+	clickables.push_back(threeShipCounter);
+	clickables.push_back(fourShipCounter);
+	clickables.push_back(fiveShipCounter);
 	
 	//auto HFunc = [&](void){ battleField->setEditState(BattleField::EditState::Horizontal); };
 	HButton = new Button([&](void){ battleField->setEditState(BattleField::EditState::Horizontal); });
@@ -53,6 +53,14 @@ void PlaceShips::init(){
 	EButton->setPosition(counterPosX + VButton->getWidth()*2+buttonOffset*2, counterPosY + (counterOffset + counterRectSize) * 4);
 	
 	VButton->select();
+	
+	drawables.push_back(HButton);
+	drawables.push_back(VButton);
+	drawables.push_back(EButton);
+	
+	clickables.push_back(HButton);
+	clickables.push_back(VButton);
+	clickables.push_back(EButton);
 }
 
 
@@ -85,24 +93,20 @@ void PlaceShips::onMouseClick(){
 	if (battleField->deleteShip())
 		shipDeleted(battleField->getLastDeletedShipSize());
 	
-	for (int i = 0; i < countersI; i++)
-		shipCountersClickable[i]->onMouseClick();
+	for (int i = 0; i < clickables.size(); i++)
+		clickables[i]->onMouseClick();
 	
 	
-	
-	HButton->onMouseClick();
 	if (battleField->getEditState() == BattleField::EditState::Horizontal)
 		HButton->select();
 	else
 		HButton->deselect();
 	
-	VButton->onMouseClick();
 	if (battleField->getEditState() == BattleField::EditState::Vertical)
 		VButton->select();
 	else
 		VButton->deselect();
 	
-	EButton->onMouseClick();
 	if (battleField->getEditState() == BattleField::EditState::Erase)
 		EButton->select();
 	else
@@ -156,10 +160,7 @@ void PlaceShips::draw(sf::RenderWindow &window){
 	onKeyPress();
 	onMouseClick();
 	
-	for (int i = 0; i < countersI; i++)
-		shipCountersDrawable[i]->draw(window);
+	for (int i = 0; i < drawables.size(); i++)
+		drawables[i]->draw(window);
 	battleField->draw(window);
-	HButton->draw(window);
-	VButton->draw(window);
-	EButton->draw(window);
 }
