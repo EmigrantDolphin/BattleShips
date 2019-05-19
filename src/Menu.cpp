@@ -38,26 +38,53 @@ void Menu::setText(){
 void Menu::actions(){
 	sf::Vector2f mousePos = GameMaster::mousePosition;
 	
-	if (textPvP.getGlobalBounds().contains(mousePos))
+	if (textPvP.getGlobalBounds().contains(mousePos)){
 		textPvP.setFillColor(sf::Color::Black);
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+			pvp = new PlayerVsPlayer();
+			GameMaster::state = GameMaster::State::PvP;
+		}
+	}
 	else
 		textPvP.setFillColor(sf::Color::Green);
 	
-	if (textPvC.getGlobalBounds().contains(mousePos))
+	if (textPvC.getGlobalBounds().contains(mousePos)){
 		textPvC.setFillColor(sf::Color::Black);
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+			//new pvc
+			GameMaster::state = GameMaster::State::PvC;
+		}
+	}
 	else
 		textPvC.setFillColor(sf::Color::Green);
 	
-	if (textExit.getGlobalBounds().contains(mousePos))
+	if (textExit.getGlobalBounds().contains(mousePos)){
 		textExit.setFillColor(sf::Color::Black);
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			GameMaster::state = GameMaster::State::Exit;
+	}
 	else
 		textExit.setFillColor(sf::Color::Green);
 }
 
-void Menu::draw(sf::RenderWindow &window){
+void Menu::drawMenu(sf::RenderWindow &window){
 	actions();
 	window.draw(textPvC);
 	window.draw(textExit);
 	window.draw(textPvP);
+}
+
+void Menu::draw(sf::RenderWindow &window){
+	switch (GameMaster::state){
+
+		case GameMaster::State::PvP :	pvp->draw(window);
+										break;
+		case GameMaster::State::Menu :	drawMenu(window);
+										break;
+		//case GameMaster::State::PvC :	pvp.draw(window);
+		//	break;
+
+	}
+	
 }
 

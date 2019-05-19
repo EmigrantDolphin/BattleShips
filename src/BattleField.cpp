@@ -1,7 +1,8 @@
 #include "BattleField.h"
 
 
-BattleField::BattleField(){
+BattleField::BattleField(std::string name) : nameColor(sf::Color::Black){
+	this->playerNameS = name;
 	selectedRectPos.x = -1;
 	selectedRectPos.y = -1;
 	createField();
@@ -21,15 +22,32 @@ void BattleField::createField(){
 			fieldArr[i][j].setOutlineColor(sf::Color::Black);
 			fieldArr[i][j].setPosition(j*RectSize + posX + j*RectThickness*2, i*RectSize + posY + i*RectThickness*2);
 		}
+		
+	font.loadFromFile("fonts/arial.ttf");
+	playerNameT.setFont(font);
+	playerNameT.setFillColor(nameColor);
+	playerNameT.setCharacterSize(20);
+	playerNameT.setString(playerNameS);
+	playerNameT.setPosition(posX + (getWidthHeight()/2) - (playerNameT.getLocalBounds().width / 2), posY - 40);
+	
 }
 
 void BattleField::draw(sf::RenderWindow &window){
 	for (int i = 0; i < FieldHeight; i++)
 		for (int j = 0; j < FieldWidth; j++){
 			//if [cell state] then depending on cell state
-			if (fieldArr[i][j].state == RectShapeEnh::State::Alive)
-				fieldArr[i][j].setFillColor(sf::Color(222, 184, 135));
-			if (fieldArr[i][j].state == RectShapeEnh::State::Water)
+			if (fieldArr[i][j].shipVisibility == RectShapeEnh::ShipVisibility::On){
+				if (fieldArr[i][j].state == RectShapeEnh::State::Alive)
+					fieldArr[i][j].setFillColor(sf::Color(222, 184, 135));
+				if (fieldArr[i][j].state == RectShapeEnh::State::Water)
+					fieldArr[i][j].setFillColor(sf::Color::White);
+				if (fieldArr[i][j].state == RectShapeEnh::State::Hit)
+					fieldArr[i][j].setFillColor(sf::Color(255,69,0));
+				if (fieldArr[i][j].state == RectShapeEnh::State::Dead)
+					fieldArr[i][j].setFillColor(sf::Color::Black);
+				if (fieldArr[i][j].state == RectShapeEnh::State::Bubble)
+					fieldArr[i][j].setFillColor(sf::Color(30, 230, 220));
+			}else
 				fieldArr[i][j].setFillColor(sf::Color::White);
 		}
 	
@@ -41,7 +59,110 @@ void BattleField::draw(sf::RenderWindow &window){
 		for (int j = 0; j < FieldWidth; j++){
 			window.draw(fieldArr[i][j]);
 		}
+	window.draw(playerNameT);
 		
+}
+
+void BattleField::setNameColor(sf::Color color){
+	playerNameT.setFillColor(color);
+}
+
+int BattleField::getDeadShipCount(){
+	return currentDeadShips;
+}
+
+int BattleField::getTotalShipCount(){
+	return totalShips;
+}
+void BattleField::setNameText(std::string text){
+	playerNameT.setString(text);
+}
+
+void BattleField::shipVisibility(bool visible){
+	if (visible)
+		for (int i = 0; i < FieldHeight; i++)
+			for (int j = 0; j < FieldWidth; j++){
+				fieldArr[i][j].shipVisibility = RectShapeEnh::ShipVisibility::On;
+				editState = BattleField::EditState::None;
+			}
+	else
+		for (int i = 0; i < FieldHeight; i++)
+			for (int j = 0; j < FieldWidth; j++){
+				fieldArr[i][j].shipVisibility = RectShapeEnh::ShipVisibility::Off;
+				editState = BattleField::EditState::None;
+			}
+}
+
+RectShapeEnh::State BattleField::hit(){
+	if (selectedRectPos.x == -1)
+		return RectShapeEnh::State::Bubble;
+	fieldArr[selectedRectPos.y][selectedRectPos.x].shipVisibility = RectShapeEnh::ShipVisibility::On;
+	
+	switch(fieldArr[selectedRectPos.y][selectedRectPos.x].state){
+		case RectShapeEnh::State::Alive : 	fieldArr[selectedRectPos.y][selectedRectPos.x].state = RectShapeEnh::State::Hit;
+											onHitAlive();
+											return RectShapeEnh::State::Alive;
+		case RectShapeEnh::State::Hit : 	return RectShapeEnh::State::Hit;
+		case RectShapeEnh::State::Dead : 	return RectShapeEnh::State::Dead;
+		case RectShapeEnh::State::Bubble : 	return RectShapeEnh::State::Bubble;
+		case RectShapeEnh::State::Water : 	fieldArr[selectedRectPos.y][selectedRectPos.x].state = RectShapeEnh::State::Bubble;
+											return RectShapeEnh::State::Water;
+	}
+	
+}
+
+void BattleField::onHitAlive(){
+	if (aliveCellCount(selectedRectPos.x, selectedRectPos.y) == 0){
+		makeShipDead(selectedRectPos.x, selectedRectPos.y);
+		currentDeadShips++;
+	}
+	
+	for (int i = 0; i < FieldHeight; i++)
+		for (int j = 0; j < FieldWidth; j++)
+			if (fieldArr[i][j].visited)
+				fieldArr[i][j].visited = false;
+		
+}
+
+int BattleField::aliveCellCount(int x, int y){
+	int aliveCells = 0;
+	if (x < 0 || x >= FieldWidth || y < 0 || y >=FieldHeight)
+		return 0;
+	
+	if (fieldArr[y][x].visited)
+		return 0;
+	if (fieldArr[y][x].state == RectShapeEnh::State::Alive){
+		fieldArr[y][x].visited = true;
+		return 1;
+	}
+	if (fieldArr[y][x].state == RectShapeEnh::State::Water || fieldArr[y][x].state == RectShapeEnh::State::Bubble)
+		return 0;
+	
+	fieldArr[y][x].visited = true;
+
+	aliveCells += aliveCellCount(x+1, y);
+	aliveCells += aliveCellCount(x-1, y);
+	aliveCells += aliveCellCount(x, y+1);
+	aliveCells += aliveCellCount(x, y-1);
+	
+	
+	return aliveCells;
+}
+
+void BattleField::makeShipDead(int x, int y){
+	if (x < 0 || x >= FieldWidth || y < 0 || y >=FieldHeight)
+		return;
+	if (fieldArr[y][x].state != RectShapeEnh::State::Hit)
+		return;
+	
+	fieldArr[y][x].state = RectShapeEnh::State::Dead;
+	
+	makeShipDead(x+1, y);
+	makeShipDead(x-1, y);
+	makeShipDead(x, y+1);
+	makeShipDead(x, y-1);
+	
+	return;
 }
 
 float BattleField::getWidthHeight(){
@@ -54,6 +175,11 @@ void BattleField::setPos(float x, float y){
 	//refreshes positions
 	createField();
 }
+
+sf::Vector2f BattleField::getPos(){
+	return sf::Vector2f(posX, posY);
+}
+
 void BattleField::setEditState(EditState state){
 	editState = state;
 }
@@ -76,7 +202,8 @@ void BattleField::selectRect(){
 void BattleField::onMouseHover(){	
 	if (selectedRectPos.x != -1)
 		switch(editState){
-			case EditState::None :		fieldArr[selectedRectPos.y][selectedRectPos.x].setFillColor(sf::Color::Black);
+			case EditState::None :	if (fieldArr[selectedRectPos.y][selectedRectPos.x].shipVisibility == RectShapeEnh::ShipVisibility::Off)	
+										fieldArr[selectedRectPos.y][selectedRectPos.x].setFillColor(sf::Color::Green);
 									break;
 			case EditState::Vertical :	hoverShipV();
 									break;

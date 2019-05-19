@@ -10,7 +10,7 @@ public:
 	enum EditState {Horizontal, Vertical, Erase, None};
 	enum ShipSize {Two, Three, Four, Five};
 private:
-	EditState editState = EditState::Vertical;
+	EditState editState = EditState::None;
 	ShipSize selectedShipSize = ShipSize::Five;
 	ShipSize lastErasedShipSize = ShipSize::Two;
 
@@ -18,8 +18,16 @@ private:
 	static const int FieldWidth = 10, FieldHeight = 10, RectSize = 30, RectThickness = 1;
 	RectShapeEnh fieldArr[FieldWidth][FieldHeight];
 	sf::RectangleShape fieldBounds; // to make edges same as inner lines
-
+	sf::Text playerNameT;
+	sf::Color nameColor;
+	sf::Font font;
+	std::string playerNameS;
+	
 	sf::Vector2i selectedRectPos;
+	
+	//temp, running out of time
+	int const totalShips = 10;
+	int currentDeadShips = 0;
 	
 	void createField();
 
@@ -33,10 +41,15 @@ private:
 	bool isNoOneAroundV();
 	void selectRect();
 	int eraseShip(int, int);
+	
+	void onHitAlive();
+	int aliveCellCount(int, int);
+	void makeShipDead(int, int);
 public:
-	BattleField();
+	BattleField(std::string);
 	void draw(sf::RenderWindow &);
 	void setPos(float, float);
+	sf::Vector2f getPos();
 	float getWidthHeight();
 	void setEditState(EditState);
 	BattleField::EditState getEditState();
@@ -46,7 +59,12 @@ public:
 	BattleField::ShipSize getLastDeletedShipSize();
 	bool placeShip();
 	bool deleteShip();
-	
+	void shipVisibility(bool);
+	RectShapeEnh::State hit();
+	void setNameColor(sf::Color);
+	void setNameText(std::string);
+	int getDeadShipCount();
+	int getTotalShipCount();
 };
 
 #endif

@@ -2,11 +2,15 @@
 #define _PLAYERVSPLAYERH_
 
 #include <SFML/Graphics.hpp>
+#include "GameMaster.h"
 #include "BattleField.h"
 #include "PlaceShips.h"
 #include "IDrawable.h"
+#include "RectShapeEnh.h"
+#include "Button.h"
+#include <iostream>
 
-class PlayerVsPlayer : public IDrawable{
+class PlayerVsPlayer : public IDrawable, public IClickable{
 public:
 	enum State{EditingP1, EditingP2, Playing};
 private:
@@ -14,12 +18,15 @@ private:
 	BattleField *player1;
 	BattleField *player2;
 	PlaceShips *placeShips;
+	bool isPlayerSetup;
+	bool isPlayerOneTurn;
+	bool gameEnded;
+	Button *exitButton;
 
-	
-	
+	void setupPvP();
 public:
 	PlayerVsPlayer();
-	
+	void onMouseClick();
 	void draw(sf::RenderWindow &);
 
 };

@@ -27,6 +27,10 @@ private:
 	
 	Button *HButton, *VButton, *EButton;
 	float buttonOffset = 20;
+	
+	Button *exitButton;
+	
+	bool *isSetup;
 
 	void init();
 	void onKeyPress();
@@ -36,7 +40,7 @@ private:
 	void shipDeleted(BattleField::ShipSize);
 	
 public:
-	PlaceShips(BattleField *);
+	PlaceShips(BattleField *, bool *);
 	void draw(sf::RenderWindow &);
 };
 

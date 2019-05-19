@@ -1,14 +1,20 @@
 #include <SFML/Graphics.hpp>
 #include "GameMaster.h"
+#include "IDrawable.h"
+#include "PlayerVsPlayer.h"
 
-class Menu{
+class Menu : public IDrawable{
 private:
 	sf::Text textPvP, textPvC, textExit;
 	sf::Font font;
+	
+	PlayerVsPlayer *pvp;
+	
+	void actions();
 	void setText();
 public:
 	Menu();
 	void draw(sf::RenderWindow &);
-	void actions();
+	void drawMenu(sf::RenderWindow &);
 	
 };

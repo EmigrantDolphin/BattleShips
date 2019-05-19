@@ -1,7 +1,8 @@
 #include "PlaceShips.h"
 
-PlaceShips::PlaceShips(BattleField *battleField){
+PlaceShips::PlaceShips(BattleField *battleField, bool *isSetup){
 	this->battleField = battleField;
+	this->isSetup = isSetup;
 	init();
 }
 
@@ -11,7 +12,7 @@ void PlaceShips::init(){
 	battleField->setPos(x, y);
 	this->selectedShip = battleField->getSelectedShipRef();
 	
-	
+	// could probs couple counters in another class and then call class here, but I need to hurry...
 	this->twoShipCounter = new ShipCreationCounter(BattleField::ShipSize::Two, twoShipCountI, selectedShip);
 	this->threeShipCounter = new ShipCreationCounter(BattleField::ShipSize::Three, threeShipCountI, selectedShip);
 	this->fourShipCounter = new ShipCreationCounter(BattleField::ShipSize::Four, fourShipCountI, selectedShip);
@@ -61,6 +62,17 @@ void PlaceShips::init(){
 	clickables.push_back(HButton);
 	clickables.push_back(VButton);
 	clickables.push_back(EButton);
+	
+	// exit button
+	
+	exitButton = new Button([&](void){ 
+		if (twoShipCountI + threeShipCountI + fourShipCountI + fiveShipCountI == 0)
+			(*isSetup) = true; 
+	});
+	exitButton->setText("Done");
+	exitButton->setPosition(counterPosX, counterPosY + (counterOffset + counterRectSize) * 5);
+	drawables.push_back(exitButton);
+	clickables.push_back(exitButton);
 }
 
 
