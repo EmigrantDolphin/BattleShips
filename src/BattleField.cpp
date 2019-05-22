@@ -114,7 +114,7 @@ RectShapeEnh::State BattleField::hit(){
 		case RectShapeEnh::State::Water : 	fieldArr[selectedRectPos.y][selectedRectPos.x].state = RectShapeEnh::State::Bubble;
 											return RectShapeEnh::State::Water;
 	}
-	
+	return RectShapeEnh::State::Bubble;
 }
 
 void BattleField::onHitAlive(){
