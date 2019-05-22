@@ -28,7 +28,6 @@ private:
 	void refresh();
 public:
 	ShipCreationCounter(BattleField::ShipSize, int, BattleField::ShipSize *);
-	~ShipCreationCounter();
 	void setShipsLeft(int);
 	void setPos(float, float);
 	void setSize(float);

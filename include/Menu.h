@@ -16,7 +16,6 @@ private:
 	void setText();
 public:
 	Menu();
-	~Menu();
 	void draw(sf::RenderWindow &);
 	void drawMenu(sf::RenderWindow &);
 	

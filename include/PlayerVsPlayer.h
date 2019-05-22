@@ -26,7 +26,6 @@ private:
 	void setupPvP();
 public:
 	PlayerVsPlayer();
-	~PlayerVsPlayer();
 	void onMouseClick();
 	void draw(sf::RenderWindow &);
 
