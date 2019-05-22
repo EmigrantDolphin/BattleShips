@@ -41,7 +41,6 @@ void Menu::actions(){
 	if (textPvP.getGlobalBounds().contains(mousePos)){
 		textPvP.setFillColor(sf::Color::Black);
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-			//delete pvp;
 			pvp = new PlayerVsPlayer();
 			GameMaster::state = GameMaster::State::PvP;
 		}
@@ -52,7 +51,6 @@ void Menu::actions(){
 	if (textPvC.getGlobalBounds().contains(mousePos)){
 		textPvC.setFillColor(sf::Color::Black);
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-			//delete pvc;
 			pvc = new PlayerVsComputer();
 			GameMaster::state = GameMaster::State::PvC;
 		}

@@ -82,3 +82,10 @@ void PlayerVsPlayer::onMouseClick(){
 		}
 	}
 }
+
+PlayerVsPlayer::~PlayerVsPlayer(){
+	delete player1;
+	delete player2;
+	delete placeShips;
+	delete exitButton;
+}

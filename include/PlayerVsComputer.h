@@ -39,7 +39,7 @@ private:
 	void onDeath();
 public:
 	PlayerVsComputer();
-	
+	~PlayerVsComputer();
 	void draw(sf::RenderWindow &);
 	void onMouseClick();
 };

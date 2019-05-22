@@ -177,3 +177,9 @@ void PlaceShips::draw(sf::RenderWindow &window){
 	battleField->draw(window);
 }
 
+PlaceShips::~PlaceShips(){
+	delete HButton;
+	delete VButton;
+	delete EButton;
+	delete exitButton;
+}

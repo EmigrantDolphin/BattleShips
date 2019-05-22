@@ -216,3 +216,10 @@ void PlayerVsComputer::onDeath(){
 		}
 }
 
+PlayerVsComputer::~PlayerVsComputer(){
+	delete player;
+	delete computer;
+	delete exitButton;
+	delete placeShipsAuto;
+	delete placeShips;
+}

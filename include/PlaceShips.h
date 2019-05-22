@@ -41,6 +41,7 @@ private:
 	
 public:
 	PlaceShips(BattleField *, bool *);
+	~PlaceShips();
 	void draw(sf::RenderWindow &);
 };
 
