@@ -84,3 +84,7 @@ void ShipCreationCounter::setSize(float size){
 	rectSize = size;
 	refresh();
 }
+
+ShipCreationCounter::~ShipCreationCounter(){
+	delete [] rect;
+}

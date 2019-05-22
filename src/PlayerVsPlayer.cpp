@@ -81,5 +81,11 @@ void PlayerVsPlayer::onMouseClick(){
 			player1->setNameColor(sf::Color::Green);
 		}
 	}
+}
 
+PlayerVsPlayer::~PlayerVsPlayer(){
+	delete player1;
+	delete player2;
+	delete placeShips;
+	delete exitButton;
 }

@@ -2,6 +2,7 @@
 #include "GameMaster.h"
 #include "IDrawable.h"
 #include "PlayerVsPlayer.h"
+#include "PlayerVsComputer.h"
 
 class Menu : public IDrawable{
 private:
@@ -9,11 +10,13 @@ private:
 	sf::Font font;
 	
 	PlayerVsPlayer *pvp;
+	PlayerVsComputer *pvc;
 	
 	void actions();
 	void setText();
 public:
 	Menu();
+	~Menu();
 	void draw(sf::RenderWindow &);
 	void drawMenu(sf::RenderWindow &);
 	

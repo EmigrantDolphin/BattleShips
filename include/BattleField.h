@@ -45,12 +45,16 @@ private:
 	void onHitAlive();
 	int aliveCellCount(int, int);
 	void makeShipDead(int, int);
+	
+	
 public:
 	BattleField(std::string);
 	void draw(sf::RenderWindow &);
 	void setPos(float, float);
 	sf::Vector2f getPos();
 	float getWidthHeight();
+	float getFieldWidth();
+	float getFieldHeight();
 	void setEditState(EditState);
 	BattleField::EditState getEditState();
 	void setSelectedShipSize(ShipSize);
@@ -65,6 +69,11 @@ public:
 	void setNameText(std::string);
 	int getDeadShipCount();
 	int getTotalShipCount();
+	void setSelectedRectPos(int, int);
+	
+	RectShapeEnh& getFieldCell(int, int);
+	
+	void printConsole();
 };
 
 #endif

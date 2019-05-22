@@ -78,6 +78,12 @@ void BattleField::setNameText(std::string text){
 	playerNameT.setString(text);
 }
 
+RectShapeEnh& BattleField::getFieldCell(int x, int y){
+	if (x >= 0 && x < FieldWidth && y >= 0 && y <FieldHeight)
+		return fieldArr[x][y];
+	return fieldArr[0][0];
+}
+
 void BattleField::shipVisibility(bool visible){
 	if (visible)
 		for (int i = 0; i < FieldHeight; i++)
@@ -168,7 +174,12 @@ void BattleField::makeShipDead(int x, int y){
 float BattleField::getWidthHeight(){
 	return (RectSize+RectThickness*2) * FieldWidth; 
 }
-
+float BattleField::getFieldWidth(){
+	return FieldWidth;
+}
+float BattleField::getFieldHeight(){
+	return FieldHeight;
+}
 void BattleField::setPos(float x, float y){
 	posX = x;
 	posY = y;
@@ -264,6 +275,11 @@ BattleField::ShipSize* BattleField::getSelectedShipRef(){
 }
 BattleField::EditState BattleField::getEditState(){
 	return editState;
+}
+
+void BattleField::setSelectedRectPos(int x, int y){
+	selectedRectPos.x = x;
+	selectedRectPos.y = y;
 }
 
 bool BattleField::isNoOneAroundH(){
@@ -385,3 +401,15 @@ bool BattleField::placeShip(){
 	return false;
 }
 
+void BattleField::printConsole(){
+	for (int i = 0; i < FieldHeight; i++){
+		for (int j = 0; j < FieldWidth; j++){
+			if (fieldArr[i][j].state == RectShapeEnh::State::Alive)
+				std::cout << "O";
+			else
+				std::cout << "-";
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
