@@ -1,22 +1,22 @@
 # BattleShips
-Uni project
+Uni project 
 
 Final product will have Player vs Player and Player vs AI
 
 
-On Linux:
+###### On Linux:
 
 sudo apt-get install libsfml-dev
 
-./LinCompile.sh compile    to compile
+*./LinCompile.sh compile*    to compile
 
-./LinCompile.sh compile run     to compile and run
+*./LinCompile.sh compile run*     to compile and run
 
-./BattleShipsL.out      just to run oldest compiled version
+*./BattleShipsL.out*      just to run oldest compiled version
 
 
 
-On Windows:
+###### On Windows:
 
 Currently throws error at run on PCs other than mine. 
 
