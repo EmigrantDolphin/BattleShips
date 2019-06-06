@@ -3,6 +3,13 @@ Uni project
 
 Final product will have Player vs Player and Player vs AI
 
+### Launching
+##### On windows:
+run **BattleShipsW.exe** to run the latest compiled version
+##### On Linux:
+Have to install sfml. Working on making it linked statically
+
+# Compilation
 
 ### On Linux:
 
@@ -27,5 +34,3 @@ Environment variable set to g++.exe directory (bin folder of mingw installation)
 
 **"BattleShipsW.exe"**     to run latest compiled version
 
-
-Trying to figure out a way to run without the need of compiler. AKA release
