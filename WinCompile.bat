@@ -19,9 +19,9 @@ set myFiles=-I.\include %src%
 rem Linking sfml libraries to compilator
 set sfml=-I.\SFML\include -L.\SFML\lib -l:libsfml-graphics.a -l:libsfml-window.a -l:libsfml-system.a
 
-if "%2" == "" g++ -static-libgcc main.cpp -o BattleShipsW.exe -std=c++14 %myFiles% %sfml%
+if "%2" == "" g++ main.cpp -o BattleShipsW.exe -std=c++14 %myFiles% %sfml%
 
-if "%2" == "run" g++ -static-libgcc main.cpp  -o BattleShipsW.exe -std=c++14 %myFiles% %sfml% && BattleShipsW.exe
+if "%2" == "run" g++ main.cpp  -o BattleShipsW.exe -std=c++14 %myFiles% %sfml% && BattleShipsW.exe
 
 goto EOF
 
