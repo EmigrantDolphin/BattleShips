@@ -1,8 +1,15 @@
 # BattleShips
 Uni project 
 
-Final product will have Player vs Player and Player vs AI
+Currently has some very bad programming practices and a lot of hard-coded values. Been in a rush. Possibly gonna fix all of it once I have time.
 
+### Launching
+##### On windows:
+run **BattleShipsW.exe** to run the latest compiled version
+##### On Linux:
+Have to install sfml. Working on making it linked statically
+
+# Compilation
 
 ### On Linux:
 
@@ -27,5 +34,3 @@ Environment variable set to g++.exe directory (bin folder of mingw installation)
 
 **"BattleShipsW.exe"**     to run latest compiled version
 
-
-Trying to figure out a way to run without the need of compiler. AKA release
