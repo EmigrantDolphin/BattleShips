@@ -1,7 +1,7 @@
 # BattleShips
 Uni project 
 
-Final product will have Player vs Player and Player vs AI
+Currently has some very bad programming practices and a lot of hard-coded values. Been in a rush. Possibly gonna fix all of it once I have time.
 
 ### Launching
 ##### On windows:
